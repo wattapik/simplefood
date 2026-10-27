@@ -1,0 +1,14 @@
+# Copy this file to deploy/config.sh and fill in your own values.
+# deploy/config.sh is gitignored (it's specific to your server) — never commit it.
+
+# SSH target for the Debian server. Needs passwordless sudo for the first
+# provision.sh run (systemctl/apt/ufw), and write access to REMOTE_PATH after that.
+REMOTE="deploy@203.0.113.10"
+
+# Absolute path on the server where the app will live.
+REMOTE_PATH="/var/www/simplefood"
+
+# Public domain this app is served from — must already have an A/AAAA record
+# pointing at the server's IP before you run provision.sh, or Caddy's automatic
+# HTTPS certificate request will fail.
+DOMAIN="your-domain.example"

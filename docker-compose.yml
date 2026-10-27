@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: deploy/docker/backend.Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./backend/.env:/app/.env:ro
+      - ./backend/database:/app/database
+      - ./backend/storage:/app/storage
+    expose:
+      - "9000"
+
+  caddy:
+    build:
+      context: .
+      dockerfile: deploy/docker/caddy.Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:?Set DOMAIN in .env, e.g. DOMAIN=your-domain.example}
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:

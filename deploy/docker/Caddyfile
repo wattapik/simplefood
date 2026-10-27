@@ -1,0 +1,19 @@
+{$DOMAIN} {
+	encode gzip
+
+	@api path /api/* /up
+	handle @api {
+		reverse_proxy backend:9000 {
+			transport fastcgi {
+				root /app/public
+				env SCRIPT_FILENAME /app/public/index.php
+			}
+		}
+	}
+
+	handle {
+		root * /srv/web
+		try_files {path} /index.html
+		file_server
+	}
+}

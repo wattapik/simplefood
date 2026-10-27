@@ -1,0 +1,25 @@
+{{DOMAIN}} {
+	encode gzip
+
+	# Laravel API
+	handle /api/* {
+		root * /var/www/simplefood/backend/public
+		php_fastcgi unix//run/php/php8.4-fpm.sock
+		file_server
+	}
+
+	# Health check passthrough (php artisan's default /up route)
+	handle /up {
+		root * /var/www/simplefood/backend/public
+		php_fastcgi unix//run/php/php8.4-fpm.sock
+		file_server
+	}
+
+	# The Expo web export — single-page app, so unknown paths fall back to index.html
+	# and React Navigation takes over client-side routing.
+	handle {
+		root * /var/www/simplefood/app/dist
+		try_files {path} /index.html
+		file_server
+	}
+}
